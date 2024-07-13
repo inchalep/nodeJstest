@@ -1,0 +1,37 @@
+# "org" ensures this Service is used with the correct Serverless Framework Access Key.
+org: dnyaneshwarinchale
+# "app" enables Serverless Framework Dashboard features and sharing them with other Services.
+app: merntest
+service: my-nodejs-app
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  region: ap-south-1
+
+functions:
+  app:
+    handler: handler.handler
+    events:
+      - http:
+          path: /
+          method: get
+      - http:
+          path: /
+          method: post
+      - http:
+          path: /
+          method: put
+      - http:
+          path: /
+          method: delete
+      - http:
+          path: /{proxy+}
+          method: any
+
+plugins:
+  - serverless-offline
+
+custom:
+  serverless-offline:
+    port: 5000

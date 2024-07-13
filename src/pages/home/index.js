@@ -38,6 +38,7 @@ const Home = () => {
   };
   const logout = () => {
     dispatch({ type: "SIGNOUT_REQUEST" });
+    localStorage.clear()
     navigate("/login");
   };
 

@@ -38,17 +38,19 @@ const policySchema = new mongoose.Schema({
     type: [String],
     required: true,
   },
-  contact: {
-    type: {
-      phone: {
-        type: String,
-        required: true,
+  riders: {
+    type: [
+      {
+        name: {
+          type: String,
+          required: true,
+        },
+        sumAssured: {
+          type: String,
+          required: true,
+        },
       },
-      email: {
-        type: String,
-        required: true,
-      },
-    },
+    ],
     required: true,
   },
 });

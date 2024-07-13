@@ -1,8 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { loginFormValidationSchema } from "../../utils/validations";
+import { toast } from "react-toastify";
+import { _post } from "../../utils/apiUtil";
+import { useDispatch } from "react-redux";
+import { setUserData } from "../../store/slices/userSlice";
 
 const Login = () => {
   const {
@@ -12,8 +16,30 @@ const Login = () => {
   } = useForm({
     resolver: yupResolver(loginFormValidationSchema),
   });
-  const formHandler = (data) => {
-    console.log(data);
+
+  const token = localStorage.getItem("token");
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (token) {
+      navigate("/");
+    }
+  }, []);
+
+  const formHandler = async (data) => {
+    try {
+      const payload = {
+        email: data.email,
+        password: data.password,
+      };
+      const res = await _post("user/login", payload);
+      dispatch(setUserData(res.data));
+      localStorage.setItem("token", res.data.token);
+      navigate("/");
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
 
   return (
@@ -26,6 +52,7 @@ const Login = () => {
         <label className='text-gray-300 text-sm'>Email</label>
         <input
           {...register("email", { required: true })}
+          type='text'
           className='input-element peer text-sm'
         />
         {errors.email ? (

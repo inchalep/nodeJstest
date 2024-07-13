@@ -4,9 +4,16 @@
 
 @layer utilities {
   .input-element {
-    @apply  p-1 bg-transparent border-b px-1 outline-none border-b-gray-600 text-white text-sm;
+    @apply p-1 bg-transparent border-b px-1 outline-none border-b-gray-600 text-white text-sm;
   }
-  .err{
-    @apply text-red-500 text-xs absolute -bottom-4
+  .err {
+    @apply text-red-500 text-xs absolute -bottom-4;
+  }
+  .table th,
+  .table td {
+    @apply p-1 border border-white text-center;
+  }
+  .tableBtn{
+    @apply p-1 px-5 shadow-lg bg-sky-800 rounded-md text-gray-300 text-right
   }
 }

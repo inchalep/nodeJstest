@@ -1,8 +1,12 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { signUpFormValidationSchema } from "../../utils/validations";
+import { _post } from "../../utils/apiUtil";
+import { toast } from "react-toastify";
+import { setUserData } from "../../store/slices/userSlice";
+import { useDispatch } from "react-redux";
 
 const Registration = () => {
   const {
@@ -12,9 +16,33 @@ const Registration = () => {
   } = useForm({
     resolver: yupResolver(signUpFormValidationSchema),
   });
-  console.log(errors, "errors--");
-  const formHandler = (data) => {
-    console.log(data);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    if (token) {
+      navigate("/");
+    }
+  }, []);
+
+  const formHandler = async (data) => {
+    try {
+      const payload = {
+        name: data.name,
+        dob: data.dob,
+        phone: data.mobile,
+        email: data.email,
+        password: data.password,
+        cPassword: data.cPassword,
+      };
+      const res = await _post("user/registration", payload);
+      dispatch(setUserData(res.data));
+      localStorage.setItem("token", res.data.token);
+      navigate("/");
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
   return (
     <form

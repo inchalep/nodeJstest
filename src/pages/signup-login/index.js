@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useMemo } from "react";
 import Login from "../../components/login";
 import { useResolvedPath } from "react-router-dom";
 import Registration from "../../components/registration";

@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { _get } from "../../utils/apiUtil";
 import CalculationForm from "../../components/CalculationForm";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const Home = () => {
   const [policiesData, setPoliciesData] = useState([]);
@@ -10,6 +10,7 @@ const Home = () => {
   const user = useSelector((state) => state.user.data);
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (!token) {
@@ -35,10 +36,15 @@ const Home = () => {
       policiesData.find((item) => item.policyId === e.target.value)
     );
   };
+  const logout = () => {
+    dispatch({ type: "SIGNOUT_REQUEST" });
+    navigate("/login");
+  };
 
   const renderCalculationForm = useCallback(() => {
     return <CalculationForm currentPolicy={currentPolicy} />;
   }, [currentPolicy]);
+
   return (
     <div className='min-h-screen  bg-sky-900 p-6'>
       <div>
@@ -50,6 +56,9 @@ const Home = () => {
             <p className='w-full text-gray-200 leading-6 text-xs'>
               {user.email}
             </p>
+            <button className='text-red-300' onClick={logout}>
+              logout
+            </button>
           </div>
           <h2 className='w-full text-gray-300 text-4xl font-semibold md:w-8/12 order-2 md:order-1 text-center'>
             Policies List
